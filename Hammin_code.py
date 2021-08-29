@@ -8,14 +8,16 @@ def calcRedundantBits(m):
         if(2**i >= m + i + 1):
             return i
 
-def get_hamming_string(parity_list):
+def get_hamming_string(parity_list,r):
     res = ""
     pos = 1
+    r_counter = 0
     for i in parity_list[0]:
         if is_power_of_two(pos):
-            while is_power_of_two(pos):
-                res = res + parity_list[(pos//2)+1][0]
+            while is_power_of_two(pos) and r_counter<r:
+                res = res + parity_list[r_counter+1][0]
                 pos+=1
+                r_counter+=1
         res = res+i
         pos+=1
     return res
@@ -72,12 +74,12 @@ def get_hamming_array(data,r,parity_type):
             if parity_data[0]%2 == 0:
                 parity_data[1][0]='1'
             res.append(parity_data[1])
-    res.append(get_hamming_string(array,r))
+    res.append(get_hamming_string(res,r))
     return res
 
 
 def hamming_encode(data,parity_type):
     return get_hamming_array(data,calcRedundantBits(len(data)),parity_type)
 
-
-print(get_hamming_string(['0110101', ['1', '0', '1', '0', '1', '1'], ['0', '0', '1', '0', '0', '1'], ['0', '1', '1', '0'], ['0', '1', '0', '1'], '00001100111']))
+#print(get_hamming_string(['0110101', ['1', '0', '1', '0', '1', '1'], ['0', '0', '1', '0', '0', '1'], ['0', '1', '1', '0'], ['0', '1', '0', '1']],4))
+print(hamming_encode('0110101',False))
