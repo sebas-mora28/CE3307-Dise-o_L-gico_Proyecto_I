@@ -1,8 +1,15 @@
 
 
+'''
+Esta funcion verifica si un numero es octal
 
+Entradas:
+            - num : Dato de tipo entero que representa el numero que se desea verificar 
 
+Salidas: 
+            - True en caso de que el numero sea octal, False en caso contrario 
 
+'''
 def isOctal(num):
     num = str(num)
 
@@ -18,15 +25,27 @@ def isOctal(num):
 
 
 
+'''
+Esta funcion recibe un numero en base octal y devuelve el equivalente del respectivo numero en
+binario, hexadecimal y decimal
 
+Entradas:
+            - num : Dato de tipo entero que representa el numero que se desea verificar 
+
+Salidas: 
+            - Lista con los equivalente en decimal, hexadecimal y binario 
+            
+'''
 def convertir(num):
 
-    if not (isOctal(num)):
+    #Se verifica que el numero sea octal
+    if not (isOctal(num)): 
         return None
 
-    
+   
     num = str(num)
 
+    #Se obtiene los equivalentes del numero dado por el usuario en decimal, binario y hexadecimal
     decimal = octal_to_decimal(num)
     binario = decimal_to_binary(decimal)
     hexa = decimal_to_hexa(decimal)
@@ -36,7 +55,17 @@ def convertir(num):
 #-------------------------- Octal a decimal --------------------------------
 
 
-def octal_to_decimal_after_coma(num):
+'''
+Esta funcion se encarga de convertir un los numeros que se encuentran despues de la comma de octal a decimal
+
+Entradas:
+            - num : Dato de tipo entero que se desea convertir
+
+Salidas: 
+            - Entero con el equivalente del numnero ingreso en octal    
+'''
+
+def octal_to_decimal_after_comma(num):
 
     n = len(num)
     exp = -1 
@@ -47,8 +76,17 @@ def octal_to_decimal_after_coma(num):
         exp -= 1  
     return res
 
-        
-def octal_to_decimal_before_coma(num):
+
+'''
+Esta funcion se encarga de convertir un los numeros que se encuentran antes de la comma de octal a decimal
+
+Entradas:
+            - num : Dato de tipo entero que se desea convertir
+
+Salidas: 
+            - Entero con el equivalente del numnero ingreso en octal    
+'''
+def octal_to_decimal_before_comma(num):
 
     n = len(num)
     exp = n - 1 
@@ -62,32 +100,41 @@ def octal_to_decimal_before_coma(num):
 
 
 
+'''
+Esta funcion encarga de convertir un numero en octal a decimal. En caso de que el numero contenga decimales, se procede a dividir el 
+numero en aquellos que se encuentran antes y despues de la coma y se realiza el procedimiento del calculo por separado. 
+
+Entradas:
+            - num : Dato de tipo entero que se desea convertir
+
+Salidas: 
+            - String que representa el equivalente del numero en octal ingresado en decimal    
+'''
 def octal_to_decimal(num):
 
-    val_after_coma = 0
+    num_after_comma = 0
 
-    if("." in num):
-        coma_index = num.index(".")
-        val_after_coma = octal_to_decimal_after_coma(num[coma_index + 1:])
-        num = num[:coma_index]
+    if ("." in num):
+        comma_index = num.index(".")
+        num_after_comma = octal_to_decimal_after_comma(num[comma_index + 1:])
+        num = num[:comma_index]
         
-    val_before_coma = octal_to_decimal_before_coma(num)
+    num_before_comma = octal_to_decimal_before_comma(num)
 
-    return str(round(val_before_coma + val_after_coma, 3))
+    return str(round(num_before_comma + num_after_comma, 3))
     
-
-
-
-def get_decimal(num): 
-    num = int(num)
-    while num > 1:
-        num /= 10
-    return num
 
 
 #------------------ decimal a hexadecimal ---------------------------------
 
+'''
+Esta funcion encarga de convertir un numero dado en decimal a su equivalente en hexadecimal
+Entradas:
+            - num : Dato de tipo entero que se desea convertir
 
+Salidas: 
+            - String que representa el equivalente del numero en octal ingresado en decimal    
+'''
 def hexa(num):
     if (num%16 >= 10):
         if (num%16==10):
@@ -112,72 +159,117 @@ def hexa(num):
 
 
 
-def decimal_to_hexa_before_coma(num):
+'''
+Esta funcion recibe un numero y devuelve los digitos decimales en caso de que los contenga
+
+Entradas:
+            - num : Dato de tipo entero 
+
+Salidas: 
+            - Flotante que representa los decimales del numero dado 
+'''
+def get_decimals(num): 
+    num = int(num)
+    while num > 1:
+        num /= 10
+    return num
+
+
+
+
+'''
+Esta funcion se encarga de convertir un los numeros que se encuentran antes de la comma de decimal a hexadecimal
+
+Entradas:
+            - num : Dato de tipo entero que se desea convertir
+
+Salidas: 
+            - Entero con el equivalente del numnero ingreso en octal    
+'''
+def decimal_to_hexa_before_comma(num):
     return hexa(int(num))
 
 
 
+
+'''
+Esta funcion encarga de convertir un numero en decimal a hexadecimal. En caso de que el numero contenga decimales, se procede a dividir el 
+numero en aquellos que se encuentran antes y despues de la coma y se realiza el procedimiento del calculo por separado. 
+
+Entradas:
+            - num : Dato de tipo entero que se desea convertir
+
+Salidas: 
+            - String que representa el equivalente del numero en octal ingresado en decimal    
+'''
 def decimal_to_hexa(num):
 
-    val_after_coma = ""
+    num_after_comma = ""
 
     if ("." in num):
         num, decimal = num.split(".")
-        val_after_coma = "."
+        num_after_comma = "."
 
         for i in range(0, 3):
 
-            ent, decimal = str((get_decimal(decimal))* 16).split(".")
+            ent, decimal = str((get_decimals(decimal))* 16).split(".")
             decimal = int(decimal)
-            val_after_coma += hexa(int(ent))  
+            num_after_comma += hexa(int(ent))  
 
-    return decimal_to_hexa_before_coma(num) + val_after_coma
-
-
-print(decimal_to_hexa("122232.3232"))
-
-
-    
-
-
-
-
-  
-
+    return decimal_to_hexa_before_comma(num) + num_after_comma
 
 
 #--------------------------------- decimal a binario ------------------------
 
 
-def decimal_to_binary_before_coma(num):
-    return str(decimal_to_binary_before_coma_aux(int(num), 0))
+
+'''
+Esta funcion se encarga de convertir un los numeros que se encuentran antes de la comma de decimal a binario
+
+Entradas:
+            - num : Dato de tipo entero que se desea convertir
+
+Salidas: 
+            - Entero con el equivalente del numnero ingreso en octal    
+'''
+def decimal_to_binary_before_comma(num):
+    return str(decimal_to_binary_before_comma_aux(int(num), 0))
 
 
-def decimal_to_binary_before_coma_aux(num, exp):
+def decimal_to_binary_before_comma_aux(num, exp):
         if (num==0):
             return 0
         else:
-            return decimal_to_binary_before_coma_aux(num//2,exp+1) + (num%2)*10**exp
+            return decimal_to_binary_before_comma_aux(num//2,exp+1) + (num%2)*10**exp
 
 
+'''
+Esta funcion encarga de convertir un numero en decimal a binario. En caso de que el numero contenga decimales, se procede a dividir el 
+numero en aquellos que se encuentran antes y despues de la coma y se realiza el procedimiento del calculo por separado. 
+
+Entradas:
+            - num : Dato de tipo entero que se desea convertir
+
+Salidas: 
+            - String que representa el equivalente del numero en octal ingresado en decimal    
+'''
 def decimal_to_binary(num):
 
-    val_after_coma = ""
+    num_after_comma = ""
   
     if ("." in num):
         num, decimal = num.split(".")
-        val_after_coma = "."
+        num_after_comma = "."
         num = int(num)
         decimal = int(decimal)
 
         for i in range(0, 3):
 
-            ent, decimal = str((get_decimal(decimal))* 2).split(".")
+            ent, decimal = str((get_decimals(decimal))* 2).split(".")
             decimal = int(decimal)
-            val_after_coma += ent  
+            num_after_comma += ent  
 
-    return decimal_to_binary_before_coma(num) + val_after_coma
-
+    return decimal_to_binary_before_comma(num) + num_after_comma
 
 
 print(convertir(13435))
