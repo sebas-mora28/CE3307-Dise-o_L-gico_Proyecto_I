@@ -1,4 +1,4 @@
-EL3307-Diseno_Logico_Proyecto_I
+# EL3307-Diseno_Logico_Proyecto_I
 
-Requerimientos:
+## Requerimientos:
 matplotlib==3.4.3
