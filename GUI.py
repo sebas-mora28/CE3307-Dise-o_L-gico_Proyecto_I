@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter.messagebox import *
 import plot_nrzi 
 import conversions
-
+import Hammin_code
 
 #         ____________________
 # _______/Constants
@@ -63,6 +63,12 @@ hamming_entry = Entry(main_canvas,font=(t_font,16))
 hamming_entry.place(x=770,y=200)
 main_canvas.create_text(835,190,fill= text_color,  text="Enter a binary number",font= (t_font,small_text_size))
 
+parity = BooleanVar()
+odd = Radiobutton(main_canvas,text="Odd parity", variable=parity, value=False , font=(t_font,subt_font_size),fg=text_color,activeforeground=btn_color,activebackground=bg_color,bg=bg_color,highlightcolor=btn_color,selectcolor=bg_color)
+odd.place(x=805,y=280)
+even = Radiobutton(main_canvas,text="Even parity", variable=parity, value=True , font=(t_font,subt_font_size),fg=text_color,activeforeground=btn_color,activebackground=bg_color,bg=bg_color,highlightcolor=btn_color,selectcolor=bg_color)
+even.place(x=805,y=310)
+
 #         _______________________________
 # _______/Button functionality
 
@@ -86,9 +92,9 @@ def plot():
     try:
         signal = int (NZRI_entry.get(),2)
         if initial_state.get():
-            plot_nrzi.plot_NRZI(signal,0b1);
+            plot_nrzi.plot_NRZI(signal,0b1)
         else:
-            plot_nrzi.plot_NRZI(signal,0b0);
+            plot_nrzi.plot_NRZI(signal,0b0)
     except:
         if NZRI_entry.get() == "":
             showwarning(title="Alert!", message="Please enter a binary signal")
@@ -98,7 +104,8 @@ def plot():
 def encode():
 
     try:
-        a = 1/0 ;
+        print(Hammin_code.hamming_encode(hamming_entry.get(),parity.get()))
+
     except:
         if hamming_entry.get() == "":
             showwarning(title="Alert!", message="Please enter a binary number")
@@ -116,7 +123,7 @@ plot_btn.place(x=450,y=380)
 
 encode_btn =  Button(main_canvas, text="Encode!", command=encode, font=(t_font,subt_font_size), fg='black', bg=btn_color)
 encode_btn.config(height=1, width=10)
-encode_btn.place(x=810,y=280)
+encode_btn.place(x=810,y=380)
 
 
 
