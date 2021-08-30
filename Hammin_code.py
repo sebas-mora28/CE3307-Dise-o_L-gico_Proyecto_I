@@ -77,9 +77,48 @@ def get_hamming_array(data,r,parity_type):
     res.append(get_hamming_string(res,r))
     return res
 
+def parity_bits_amount(data):
+    size_of_data = len(data)
+    for i in range(0,size_of_data):
+        if 2**i>=size_of_data:
+            return i
+
+def get_hamming_check(data,parity_type):
+    res = [data]
+    r = parity_bits_amount(data)
+    temp_list = []
+    if parity_type:
+        for i in range(0,r):
+            parity_data = count_parity((2**i)-1,2**i, data)
+            if parity_data[0]%2 == 0:
+                temp_list.append('0')
+                temp_list.append("Correcto")
+            else:
+                temp_list.append('1')
+                temp_list.append("Error")
+            temp_list.append(parity_data[1])
+            res.append(temp_list)
+            temp_list = []
+    else:
+        for i in range(0,r):
+            parity_data = count_parity((2**i)-1,2**i, data)
+            if parity_data[0]%2 == 1:
+                temp_list.append('0')
+                temp_list.append("Correcto")
+            else:
+                temp_list.append('1')
+                temp_list.append("Falso")
+            temp_list.append(parity_data[1])
+            res.append(temp_list)
+            temp_list = []
+    return res
 
 def hamming_encode(data,parity_type):
     return get_hamming_array(data,calcRedundantBits(len(data)),parity_type)
 
+def check_hamming_encode(data,parity_type):
+    return get_hamming_check(data,parity_type)
+
+print(check_hamming_encode("10001100100",True))
 #print(get_hamming_string(['0110101', ['1', '0', '1', '0', '1', '1'], ['0', '0', '1', '0', '0', '1'], ['0', '1', '1', '0'], ['0', '1', '0', '1']],4))
-print(hamming_encode('0110101',False))
+#print(hamming_encode('0110101',False))
