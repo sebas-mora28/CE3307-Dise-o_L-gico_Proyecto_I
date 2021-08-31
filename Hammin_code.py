@@ -4,6 +4,10 @@ def calcRedundantBits(m):
     # to calculate the no of redundant bits.
     # Iterate over 0 .. m and return the value
     # that satisfies the equation
+    if m == 1:
+        return 1
+    if m == 2 or m ==3:
+        return 2
     for i in range(m):
         if(2**i >= m + i + 1):
             return i
@@ -15,7 +19,10 @@ def get_hamming_string(parity_list,r):
     for i in parity_list[0]:
         if is_power_of_two(pos):
             while is_power_of_two(pos) and r_counter<r:
-                res = res + parity_list[r_counter+1][0]
+                for j in parity_list[r_counter+1]:
+                    if j.isnumeric():
+                        res = res + j
+                        break 
                 pos+=1
                 r_counter+=1
         res = res+i
@@ -130,5 +137,5 @@ def check_hamming_encode(data,parity_type):
     return (get_hamming_check(data,parity_type))
 
 #print(check_hamming_encode("10001100100",True))
-#print(hamming_encode('0110101',True))
+print(hamming_encode('1',True))
 #print(int("101",2))
