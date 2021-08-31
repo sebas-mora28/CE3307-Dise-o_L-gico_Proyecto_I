@@ -1,4 +1,3 @@
-from math import sqrt
 def calcRedundantBits(m):
     # Use the formula 2 ^ r >= m + r + 1
     # to calculate the no of redundant bits.
@@ -104,7 +103,7 @@ def get_hamming_check(data,parity_type):
             parity_data = count_parity((2**i)-1,2**i, data)
             if parity_data[0]%2 == 0:
                 temp_list.append('0')
-                temp_list.append("Correcto")
+                temp_list.append("Correct")
                 pos_error = pos_error + "0"
             else:
                 temp_list.append('1')
@@ -118,7 +117,7 @@ def get_hamming_check(data,parity_type):
             parity_data = count_parity((2**i)-1,2**i, data)
             if parity_data[0]%2 == 1:
                 temp_list.append('0')
-                temp_list.append("Correcto")
+                temp_list.append("Correct")
                 pos_error = pos_error + "0"
             else:
                 temp_list.append('1')
@@ -137,5 +136,5 @@ def check_hamming_encode(data,parity_type):
     return (get_hamming_check(data,parity_type))
 
 #print(check_hamming_encode("10001100100",True))
-print(hamming_encode('1',True))
+#print(hamming_encode('0110101',True))
 #print(int("101",2))

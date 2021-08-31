@@ -272,7 +272,7 @@ def decimal_to_binary(num):
     return decimal_to_binary_before_comma(num) + num_after_comma
 
 
-##print(convertir(13435))
+##print(convertir(1.3123))
 ##print(convertir(3256712.34532))
 ##print(convertir(12221.22356))
 ##print(convertir(97832))

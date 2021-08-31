@@ -3,7 +3,6 @@ from tkinter.messagebox import *
 import plot_nrzi 
 import conversions
 import Hammin_code
-
 #         ____________________
 # _______/Constants
 
@@ -71,11 +70,15 @@ even.place(x=805,y=310)
 
 #         _______________________________
 # _______/Button functionality
+def to_num(num):
+    try:
+        return int(num)
+    except:
+        return float(num)
 
 def convert():
-
     try:
-        oct_num = int (conv_entry.get())
+        oct_num = to_num(conv_entry.get())
         converted = conversions.convertir(oct_num)
         main_canvas.itemconfig(decimal_text,text="Decimal: "+converted[0])
         main_canvas.itemconfig(hex_text,text="Hex: "+converted[2])
@@ -86,7 +89,6 @@ def convert():
             showwarning(title="Alert!", message="Please enter a octal number")
         else:
             showerror(title="Error!", message="Invadid octal number")
-    
     
 def plot():
     try:
@@ -102,15 +104,246 @@ def plot():
             showerror(title="Error!", message="Invalid signal")
 
 def encode():
-
     try:
-        print(Hammin_code.hamming_encode(hamming_entry.get(),parity.get()))
-
+        int(hamming_entry.get(),2)
+        encoded = Hammin_code.hamming_encode(hamming_entry.get(),parity.get())
+        create_new_encription(encoded)
     except:
         if hamming_entry.get() == "":
             showwarning(title="Alert!", message="Please enter a binary number")
         else:
             showerror(title="Error!", message="Invalid binary number")
+
+def check():
+    try:
+        int(hamming_entry.get(),2)
+        checked = Hammin_code.check_hamming_encode(hamming_entry.get(),parity.get())
+        create_new_check(checked[0],checked[1],int(parity.get()))
+    except:
+        if hamming_entry.get() == "":
+            showwarning(title="Alert!", message="Please enter a binary number")
+        elif len(hamming_entry.get()) == 1:
+            showerror(title="Error!", message="Please enter a binary number with not less than 2 bits")
+        else:
+            showerror(title="Error!", message="Invalid binary number")
+
+
+def create_new_encription(list):
+
+    # find total number of rows and
+    # columns in list
+    total_rows = len(list)+1
+    total_columns = len(list[-1])+1
+
+    window_w = (total_columns-1)*37 + 188
+    window_h = total_rows*27
+
+    new_encript = Toplevel()
+    new_encript.resizable(False, False)
+    new_encript.title('Encoded number')
+    new_encript.geometry("%dx%d+0+0" % (window_w, window_h))
+
+    # Canvas
+    encript_canvas = Canvas(new_encript, width= window_w, height=window_h, bg=bg_color)
+    encript_canvas.place(x=-2, y=-2)
+
+    d=0
+    p=0
+    
+    for i in range(total_rows):
+            for j in range(total_columns):
+
+                #(0,0)
+                if i==0 and j==0:
+                    Entry(encript_canvas, width=17, fg=text_color, background=bg_color,
+                                font=(t_font,subt_font_size,'bold')).grid(row=i,column=j)
+
+                #(1,0)
+                elif i==1 and j==0:
+                    e = Entry(encript_canvas, width=17, fg=text_color, background=bg_color,
+                                font=(t_font,subt_font_size,'bold'))
+                    e.grid(row=i,column=j)
+                    e.insert(END, "Input(No parity)")
+                    p=0
+                    d=0
+
+                #(p's column)
+                elif i!=0 and i!=1 and  j==0 and i != total_rows - 1:
+                    e = Entry(encript_canvas, width=17, fg=text_color, background=bg_color,
+                                font=(t_font,subt_font_size,'bold'))
+                    e.grid(row=i, column=j)
+                    e.insert(END, "p" + str(i-1))
+
+                #(n,0)
+                elif i == total_rows-1 and j==0:
+                    e = Entry(encript_canvas, width=17, fg=text_color, background=bg_color,
+                                font=(t_font,subt_font_size,'bold'))
+                    e.grid(row=i,column=j)
+                    e.insert(END, "Output(with parity)")
+
+                #(p & d row)
+                elif i==0 and j!=0:
+                    e = Entry(encript_canvas, width=3, fg=text_color, background=bg_color,
+                                font=(t_font,subt_font_size,'bold'))
+                    
+                    e.grid(row=i, column=j)
+                    if j == 2**p:
+                        e.insert(END, "p" + str(p+1))
+                        p=p+1
+                    else:
+                        d=d+1
+                        e.insert(END, "d" + str(d))
+                
+                #(input string)
+                elif i==1 and j!=0:
+                    if j != 2**p:
+                        e = Entry(encript_canvas, width=3, fg=text_color, background=bg_color,
+                                    font=(t_font,subt_font_size,'bold'))
+                        e.grid(row=i, column=j)
+                        e.insert(END,list[0][d])    
+                        d=d+1
+                    else:
+                        e = Entry(encript_canvas, width=3, fg=text_color, background=bg_color,
+                                    font=(t_font,subt_font_size,'bold'))
+                        e.grid(row=i, column=j)
+                        p=p+1
+                    
+                #(output string)
+                elif i==total_rows-1:
+                    e = Entry(encript_canvas, width=3, fg=text_color, background=bg_color,
+                                font=(t_font,subt_font_size,'bold'))
+                    
+                    e.grid(row=i, column=j)
+                    e.insert(END,list[-1][j-1])
+                
+                #(inner lists)
+                else:
+                    e = Entry(encript_canvas, width=3, fg=text_color, background=bg_color,
+                                font=(t_font,subt_font_size,'bold'))
+                    
+                    e.grid(row=i, column=j)
+                    e.insert(END,list[i-1][j-1])
+
+
+def create_new_check(list,error,parity):
+    if error == 0: 
+        showinfo(title="Success!", message="No errors were detected")
+    else:
+        showerror(title="Error detected!",message="Error found on bit " + str(error))
+    # find total number of rows and
+    # columns in list
+    total_rows = len(list)+1
+    total_columns = len(list[0])+3
+
+    window_w = (total_columns-3)*37 + (110*3)
+    window_h = total_rows*27
+
+
+
+    new_check = Toplevel()
+    new_check.resizable(False, False)
+    new_check.title('Checked parity')
+    new_check.geometry("%dx%d+0+0" % (window_w, window_h))
+
+    # Canvas
+    check_canvas = Canvas(new_check, width= window_w, height=window_h, bg=bg_color)
+    check_canvas.place(x=-2, y=-2)
+
+    d=0
+    p=0
+    
+    for i in range(total_rows):
+            for j in range(total_columns):
+
+                #(0,0)
+                if i==0 and j==0:
+                    Entry(check_canvas, width=10, fg=text_color, background=bg_color,
+                                font=(t_font,subt_font_size,'bold')).grid(row=i,column=j)
+                #(1,0)
+                elif i==1 and j==0:
+                    e = Entry(check_canvas, width=10, fg=text_color, background=bg_color,
+                                font=(t_font,subt_font_size,'bold'))
+                    e.grid(row=i,column=j)
+                    e.insert(END, "Input")
+                    p=0
+                    d=0
+
+                #(0,m-1)
+                elif i==0 and j==total_columns-1:
+                    e = Entry(check_canvas, width=10, fg=text_color, background=bg_color,
+                                font=(t_font,subt_font_size,'bold'))
+                    e.grid(row=i,column=j)
+                    e.insert(END, "Parity Bit")
+
+                #(0,m-2)
+                elif i==0 and j==total_columns-2:
+                    e = Entry(check_canvas, width=10, fg=text_color, background=bg_color,
+                                font=(t_font,subt_font_size,'bold'))
+                    e.grid(row=i,column=j)
+                    e.insert(END, "Parity check")
+
+                #(1,m-1)
+                elif i==1 and j==total_columns-1:
+                    e = Entry(check_canvas, width=10, fg=text_color, background=bg_color,
+                                font=(t_font,subt_font_size,'bold'))
+                    e.grid(row=i,column=j)
+
+                #(2,m-2)
+                elif i==1 and j==total_columns-2:
+                    e = Entry(check_canvas, width=10, fg=text_color, background=bg_color,
+                                font=(t_font,subt_font_size,'bold'))
+                    e.grid(row=i,column=j)
+                    e.insert(END, str(parity))
+
+                #(p's column)
+                elif i!=0 and i!=1 and j==0:
+                    e = Entry(check_canvas, width=10, fg=text_color, background=bg_color,
+                                font=(t_font,subt_font_size,'bold'))
+                    e.grid(row=i, column=j)
+                    e.insert(END, "p" + str(i-1))
+
+                #(p & d row)
+                elif i==0 and j!=0:
+                    e = Entry(check_canvas, width=3, fg=text_color, background=bg_color,
+                                font=(t_font,subt_font_size,'bold'))
+                    
+                    e.grid(row=i, column=j)
+                    if j == 2**p:
+                        e.insert(END, "p" + str(p+1))
+                        p=p+1
+                    else:
+                        d=d+1
+                        e.insert(END, "d" + str(d))
+                
+                elif i==1 and j!=0 and j < total_columns-2:
+                    e = Entry(check_canvas, width=3, fg=text_color, background=bg_color,
+                                font=(t_font,subt_font_size,'bold'))
+                    
+                    e.grid(row=i, column=j)
+                    e.insert(END,list[0][j-1])
+                     
+                else:
+
+                    this_list = list[i-1]
+
+                    if j == total_columns-1:
+                        e = Entry(check_canvas, width=10, fg=text_color, background=bg_color,
+                                    font=(t_font,subt_font_size,'bold'))
+                        e.grid(row=i, column=j)
+                        e.insert(END,this_list[0])
+
+                    elif j == total_columns-2:
+                        e = Entry(check_canvas, width=10, fg=text_color, background=bg_color,
+                                    font=(t_font,subt_font_size,'bold'))
+                        e.grid(row=i, column=j)
+                        e.insert(END,this_list[1])
+
+                    else:
+                        e = Entry(check_canvas, width=3, fg=text_color, background=bg_color,
+                                    font=(t_font,subt_font_size,'bold'))
+                        e.grid(row=i, column=j)
+                        e.insert(END,this_list[2][j-1])
+
 
 
 conv_btn = Button(main_canvas, text="Convert!", command=convert, font=(t_font,subt_font_size), fg='black', bg=btn_color)
@@ -125,6 +358,9 @@ encode_btn =  Button(main_canvas, text="Encode!", command=encode, font=(t_font,s
 encode_btn.config(height=1, width=10)
 encode_btn.place(x=810,y=380)
 
+encode_btn =  Button(main_canvas, text="Check!", command=check, font=(t_font,subt_font_size), fg='black', bg=btn_color)
+encode_btn.config(height=1, width=10)
+encode_btn.place(x=810,y=450)
 
 
 
