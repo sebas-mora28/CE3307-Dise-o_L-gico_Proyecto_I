@@ -26,6 +26,8 @@ def count_parity(pos,block_size,array):
     counter = 0
     bit_array = []
     in_block_counter = 0
+    for i in range(0,pos):
+        bit_array.append("")
     while pos < len(array):
         if in_block_counter<block_size:
             if array[pos] == '1':
@@ -34,6 +36,8 @@ def count_parity(pos,block_size,array):
             pos+=1
             in_block_counter+=1  
         else:
+            for i in range(0,block_size):
+                bit_array.append("")
             pos+=block_size
             in_block_counter = 0
     return (counter,bit_array) 
@@ -125,6 +129,6 @@ def hamming_encode(data,parity_type):
 def check_hamming_encode(data,parity_type):
     return (get_hamming_check(data,parity_type))
 
-print(check_hamming_encode("10001100101",True))
-#print(hamming_encode('0110101',False))
+#print(check_hamming_encode("10001100100",True))
+#print(hamming_encode('0110101',True))
 #print(int("101",2))
