@@ -203,18 +203,22 @@ Salidas:
             - String que representa el equivalente del numero en octal ingresado en decimal    
 '''
 def decimal_to_hexa(num):
-
+    print(num)
     num_after_comma = ""
 
     if ("." in num):
         num, decimal = num.split(".")
         num_after_comma = "."
+        
+        decimal = int(decimal)
 
         for i in range(0, 3):
-
-            ent, decimal = str((get_decimals(decimal))* 16).split(".")
-            decimal = int(decimal)
-            num_after_comma += hexa(int(ent))  
+            if decimal != 0:    
+                ent, decimal = str((get_decimals(decimal))* 16).split(".")
+                decimal = int(decimal)
+                num_after_comma += hexa(int(ent))
+            else:
+                num_after_comma += "0"  
 
     return decimal_to_hexa_before_comma(num) + num_after_comma
 
@@ -264,15 +268,17 @@ def decimal_to_binary(num):
         decimal = int(decimal)
 
         for i in range(0, 3):
-
-            ent, decimal = str((get_decimals(decimal))* 2).split(".")
-            decimal = int(decimal)
-            num_after_comma += ent  
+            if decimal != 0:
+                ent, decimal = str((get_decimals(decimal))* 2).split(".")
+                decimal = int(decimal)
+                num_after_comma += ent  
+            else:
+                num_after_comma += "0"
 
     return decimal_to_binary_before_comma(num) + num_after_comma
 
 
-##print(convertir(1.3123))
-##print(convertir(3256712.34532))
+print(convertir(134562.34567231323245344))
+#print(convertir(3256712.34532))
 ##print(convertir(12221.22356))
 ##print(convertir(97832))
