@@ -70,12 +70,26 @@ even.place(x=805,y=310)
 
 #         _______________________________
 # _______/Button functionality
+
+'''
+Esta función recibe un numero (con o sin punto decimal) como string y lo
+devuelve como int o float segun corresponda
+
+@param num: Numero como string
+
+@return: num con integer o float segun corresponda
+'''
 def to_num(num):
     try:
         return int(num)
     except:
         return float(num)
+'''
+Esta función intenta hacer una llamada al modulo de conversion de numeros octales
+si es exitosa despliega los resultados en pantalla. Si falla muestra una alerta al usuario
+para distintos casos de error
 
+'''
 def convert():
     try:
         oct_num = to_num(conv_entry.get())
@@ -89,7 +103,12 @@ def convert():
             showwarning(title="Alert!", message="Please enter a octal number")
         else:
             showerror(title="Error!", message="Invadid octal number")
-    
+
+'''
+Esta función intenta hacer una llamada al modulo de graficacion de NZRI. 
+Si falla muestra una alerta al usuario para distintos casos de error.
+
+'''
 def plot():
     try:
         signal = int (NZRI_entry.get(),2)
@@ -103,6 +122,12 @@ def plot():
         else:
             showerror(title="Error!", message="Invalid signal")
 
+
+'''
+Esta función intenta hacer una llamada al modulo codificacion de Hamming, para con la respuesta
+ejecutar la creacion de la tabla de codificacion. Si falla muestra una alerta al usuario para distintos casos de error.
+
+'''
 def encode():
     try:
         int(hamming_entry.get(),2)
@@ -114,6 +139,11 @@ def encode():
         else:
             showerror(title="Error!", message="Invalid binary number")
 
+'''
+Esta función intenta hacer una llamada al modulo chequeo codificacion de Hamming, para con la respuesta
+ejecutar la creacion de la tabla de chequeo de codificacion. Si falla muestra una alerta al usuario para distintos casos de error.
+
+'''
 def check():
     try:
         int(hamming_entry.get(),2)
@@ -128,6 +158,13 @@ def check():
             showerror(title="Error!", message="Invalid binary number")
 
 
+
+'''
+Esta función crea y muestra en pantalla una tabla de codificacion segun los datos en list
+
+@param list: Una lista de codificacion retornada por Hammin_code.py
+
+'''
 def create_new_encription(list):
 
     # find total number of rows and
@@ -224,12 +261,23 @@ def create_new_encription(list):
                     e.grid(row=i, column=j)
                     e.insert(END,list[i-1][j-1])
 
+'''
+Esta función da una alerta al usuario si se encuentran errores es una codificacion y donde.
+Ademas crea y muestra en pantalla una tabla de chequeo de codificacion segun los datos en list.
 
+@param list: Una lista de codificacion retornada por Hammin_code.py
+
+@param error: La posicion del bit donde esta el error
+
+@param parity: Un boleano con la paridad de la codificacion. (par = true ; impar = false)
+
+'''
 def create_new_check(list,error,parity):
     if error == 0: 
         showinfo(title="Success!", message="No errors were detected")
     else:
         showerror(title="Error detected!",message="Error found on bit " + str(error))
+
     # find total number of rows and
     # columns in list
     total_rows = len(list)+1
@@ -237,8 +285,6 @@ def create_new_check(list,error,parity):
 
     window_w = (total_columns-3)*37 + (110*3)
     window_h = total_rows*27
-
-
 
     new_check = Toplevel()
     new_check.resizable(False, False)
@@ -346,6 +392,9 @@ def create_new_check(list,error,parity):
 
 
 
+#      _______________
+#_____/ Buttons 
+
 conv_btn = Button(main_canvas, text="Convert!", command=convert, font=(t_font,subt_font_size), fg='black', bg=btn_color)
 conv_btn.config(height=1, width=10)
 conv_btn.place(x=90,y=280)
@@ -363,5 +412,6 @@ encode_btn.config(height=1, width=10)
 encode_btn.place(x=810,y=450)
 
 
-
+#    ______________
+#___/ TK mainloop
 gui.mainloop()
