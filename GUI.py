@@ -33,7 +33,7 @@ main_canvas.place(x=-2,y=-2)
 
 #Tittles
 main_canvas.create_text(155,100, fill= text_color, text="Conversion Module",font= (t_font, t_font_size))
-main_canvas.create_text(515,100, fill= text_color, text="NZRI Ploter", font= (t_font, t_font_size))
+main_canvas.create_text(515,100, fill= text_color, text="NZRI Plotter", font= (t_font, t_font_size))
 main_canvas.create_text(865,100, fill= text_color, text="Hamming Code Generator", font= (t_font, t_font_size))
 
 #Sections
@@ -51,9 +51,9 @@ NZRI_entry.place(x=410,y=200)
 main_canvas.create_text(470,190, fill= text_color, text="Enter a binary signal",font= (t_font,small_text_size))
 
 initial_state = BooleanVar()
-init_zero = Radiobutton(main_canvas,text="Initiate with 0", variable=initial_state, value=False , font=(t_font,subt_font_size),fg=text_color,activeforeground=btn_color,activebackground=bg_color,bg=bg_color,highlightcolor=btn_color,selectcolor=bg_color)
+init_zero = Radiobutton(main_canvas,text="Start low", variable=initial_state, value=False , font=(t_font,subt_font_size),fg=text_color,activeforeground=btn_color,activebackground=bg_color,bg=bg_color,highlightcolor=btn_color,selectcolor=bg_color)
 init_zero.place(x=445,y=280)
-init_one = Radiobutton(main_canvas,text="Initiate with 1", variable=initial_state, value=True , font=(t_font,subt_font_size),fg=text_color,activeforeground=btn_color,activebackground=bg_color,bg=bg_color,highlightcolor=btn_color,selectcolor=bg_color)
+init_one = Radiobutton(main_canvas,text="Start high", variable=initial_state, value=True , font=(t_font,subt_font_size),fg=text_color,activeforeground=btn_color,activebackground=bg_color,bg=bg_color,highlightcolor=btn_color,selectcolor=bg_color)
 init_one.place(x=445,y=310)
 
 
@@ -111,7 +111,7 @@ Si falla muestra una alerta al usuario para distintos casos de error.
 '''
 def plot():
     try:
-        signal = int (NZRI_entry.get(),2)
+        signal = NZRI_entry.get()
         if initial_state.get():
             plot_nrzi.plot_NRZI(signal,0b1)
         else:
