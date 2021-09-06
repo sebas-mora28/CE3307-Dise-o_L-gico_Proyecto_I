@@ -39,9 +39,11 @@ def plot_NRZI(signal: str, initial_state: bin) -> None:
 
     nrzi.insert(nrzi[0], 0) # esto es un hack asquerosísimo pero ya sirve bien,
                             # luego veo cómo arreglarlo
+
+    nrzi = [-1 if x == 0 else x for x in nrzi]
     
     plt.plot(nrzi, drawstyle='steps-pre')
     x_axis = list((range(len(nrzi))))
     plt.xticks(x_axis)
-    plt.yticks([0,1])
+    plt.yticks([-1,0,1])
     plt.show()
