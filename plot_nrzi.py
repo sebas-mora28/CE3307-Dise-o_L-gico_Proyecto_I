@@ -7,7 +7,7 @@ de matplotlib de la codificación NRZ-I de esa señal.
 Requiere matplotlib para funcionar.
 
 Ejemplo de uso:
->>> plot_NRZI(0b100110100101, 0b1)
+>>> plot_NRZI("100110100101", 0b1)
 
 TO DO:
      (1) poner labels en los ejes
@@ -16,8 +16,8 @@ TO DO:
      (4) graficar la señal original
      (5) nightmode
 
-@param signal: Señal de entrada. Es un número en representación
-               binaria de python, por ejemplo: 0b100110100101
+@param signal: Señal de entrada. Es una string que
+               representa una señal. Por ejemplo: "100110100101"
 
 @param initial_state: Estado inicial de la señal. Es un número en
                       representación binaria de python,
@@ -25,8 +25,8 @@ TO DO:
 
 @return: None
 '''
-def plot_NRZI(signal: bin, initial_state: bin) -> None:
-    signal: list = [int(bit) for bit in bin(signal)[2:]]
+def plot_NRZI(signal: str, initial_state: bin) -> None:
+    signal: list = [int(bit) for bit in signal]
     nrzi: list = []
     state: bin = initial_state
     
