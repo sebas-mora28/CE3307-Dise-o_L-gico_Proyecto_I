@@ -37,10 +37,10 @@ def plot_NRZI(signal: str, initial_state: bin) -> None:
     print(f"signal: {signal}")
     print(f"nrzi:   {nrzi}")
 
-    nrzi.insert(nrzi[0], 0) # esto es un hack asquerosísimo pero ya sirve bien,
-                            # luego veo cómo arreglarlo
-
     nrzi = [-1 if x == 0 else x for x in nrzi]
+
+    nrzi.insert(0, nrzi[0]) # esto es un hack asquerosísimo pero ya sirve bien,
+                            # luego veo cómo arreglarlo
     
     plt.plot(nrzi, drawstyle='steps-pre')
     x_axis = list((range(len(nrzi))))
